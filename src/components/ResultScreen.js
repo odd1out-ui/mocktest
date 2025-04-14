@@ -14,7 +14,7 @@ const ResultScreen = ({ results }) => {
             <p className="font-semibold">Question: {item.question}</p>
             <p>UserAnswer: {item.userAnswer}</p>
             <p>CorrectAnswer:{item.correctAnswers}</p>
-            <p style={{font:'bold',color:'green'}}>Your response: {item.isCorrect==='true'?'correct':'incorrect'}</p>
+            <p style={{font:'bold',color:'green'}}>Your response: {item.isCorrect}</p>
             
           </div>
         );
