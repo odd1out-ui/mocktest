@@ -5,7 +5,7 @@ const Question = ({ questions }) => {
     const buttonRef = useRef([]);
     const [q, setQ] = useState("");
     const [options, setOptions] = useState([]);
-    const [ans, setAns] = useState([]);
+    const [ans, setAns] = useState('');
     const [finish, setFinish] = useState(false);
     const [positions, setPositions] = useState([
         { top: 50, left: 100 },
@@ -17,7 +17,7 @@ const Question = ({ questions }) => {
     ]);
     const [selectedIndex, setSelectedIndex] = useState(null);
     const [count, setCount] = useState(0);
-    const [results, setResults] = useState([]); // Changed from result to results for clarity
+    const [results, setResults] = useState([]); 
     const step = 50;
 
     useEffect(() => {
@@ -31,7 +31,7 @@ const Question = ({ questions }) => {
         const currentQuestion = questions[count];
         const correctAnswers = currentQuestion.correctAnswer || [];
 
-        // Get all button positions and labels
+        
         const buttonPositions = buttonRef.current.map((btn, i) => {
             if (!btn) return { top: 0, left: 0, label: options[i] };
             
@@ -43,31 +43,43 @@ const Question = ({ questions }) => {
             };
         });
 
-        // Sort buttons by position (top to bottom, left to right)
+        
         const sortedButtons = [...buttonPositions].sort((a, b) => {
             if (a.top === b.top) return a.left - b.left;
             return a.top - b.top;
         });
 
-        // Get user's answer in order
+        
         const userAnswer = sortedButtons.map(item => item.label);
 
-        // Check if answer is correct
-        const isCorrect = JSON.stringify(userAnswer) === JSON.stringify(correctAnswers);
+        
+        
+        let check = true;
 
-        // Store the complete result
-        setResults(prev => [...prev, {
+        for (let j = 0; j < correctAnswers.length; j++) {
+          if (userAnswer[j] !== correctAnswers[j]) {
+            check = false;
+            break;
+          }
+        }
+        
+        setAns(check ? 'correct' : 'incorrect');
+        
+        
+
+                setResults(prev => [...prev, {
             question: currentQuestion.question,
             userAnswer,
             correctAnswers,
-            isCorrect
+            isCorrect:check?'correct':'incorrect'
+            
         }]);
 
-        // Move to next question or show results
+        
         if (count < questions.length - 1) {
             setQ(questions[count + 1].question);
             setOptions(questions[count + 1].options);
-            // Reset positions for next question
+            
             setPositions([
                 { top: 50, left: 100 },
                 { top: 50, left: 200 },
@@ -97,7 +109,11 @@ const Question = ({ questions }) => {
                 }
             })
         );
-    };
+        console.log(results)
+
+      };
+
+
 
     return (
         <div className="relative h-screen p-4 bg-gray-50">
